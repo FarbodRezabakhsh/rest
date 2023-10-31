@@ -10,7 +10,7 @@ from .serializers import PersonSerializer
 # Create your views here.
 
 class Home(APIView):
-    permission_classes = [IsAuthenticated,IsAdminUser]
+    permission_classes = [IsAuthenticated,]
     def get(self,request):
         person = Person.objects.all()
         srz_data = PersonSerializer(instance=person,many=True)
