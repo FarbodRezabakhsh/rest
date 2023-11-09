@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Question,Answer
+from .custom_relational_fields import UserEmailNameRelationalField
 
 class PersonSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -9,6 +10,9 @@ class PersonSerializer(serializers.Serializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
     answer = serializers.SerializerMethodField()
+
+    user = UserEmailNameRelationalField(read_only=True) # for showing the username and email instead of user id
+
     class Meta:
         model = Question
         fields = '__all__'
