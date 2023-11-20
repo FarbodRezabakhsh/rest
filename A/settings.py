@@ -136,12 +136,17 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle'
     ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.AdminRenderer',
+    ],
     'DEFAULT_THROTTLE_RATES': {
         'anon':'5/minute',
-        'user':'10/minute'
+        'user':'1/hour'
  
         },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    
 }
  
 SPECTACULAR_SETTINGS = {

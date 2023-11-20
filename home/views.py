@@ -14,7 +14,7 @@ from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
 # Create your views here.
 
 class Home(APIView):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = []
     def get(self,request):
         person = Person.objects.all()
         srz_data = PersonSerializer(instance=person,many=True)
