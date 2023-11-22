@@ -9,12 +9,16 @@ from .serializers import PersonSerializer,QuestionSerializer,AnswerSerializer
 from rest_framework import status
 from permissions import IsOwnerOrReadOnly
 from rest_framework.throttling import UserRateThrottle,AnonRateThrottle
+from rest_framework import generics
+from rest_framework.generics import GenericAPIView
+from django.contrib.auth.models import User
+from accounts.serializers import UserSerializer
 
 
 # Create your views here.
 
 class Home(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     def get(self,request):
         person = Person.objects.all()
         srz_data = PersonSerializer(instance=person,many=True)
@@ -63,3 +67,5 @@ class QuestionDeleteView(APIView):
         question = Question.objects.get(pk=pk)
         question.delete()
         return Response({'message':'question deleted'},status=status.HTTP_200_OK)
+    
+

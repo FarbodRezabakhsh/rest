@@ -8,6 +8,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -20,11 +22,15 @@ class UserRegister(APIView):
         return Response(srz_data.errors,status=status.HTTP_400_BAD_REQUEST)
 
 class UserViewSets(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
     queryset = User.objects.all()
 
+
     def list(self,request):
-        srz_data = UserSerializer(self.queryset,many=True)
+        page_number = self.request.query_params.get('page',1)
+        page_size = self.request.query_params.get('limit',2)
+        paginator = Paginator(self.queryset,page_size)
+        srz_data = UserSerializer(paginator.page(page_number),many=True) 
         return Response(srz_data.data)
 
     def retrieve(self,request,pk=None):
@@ -49,3 +55,9 @@ class UserViewSets(viewsets.ViewSet):
             srz_data.save()
             return Response(data=srz_data.data)
         return Response(srz_data.errors)
+    
+class UserListApi(generics.ListAPIView):
+    def get(self,request):
+        queryset = User.objects.all()
+        srz_class = UserSerializer(instance=queryset,many=True)
+        return Response(srz_class.data)
